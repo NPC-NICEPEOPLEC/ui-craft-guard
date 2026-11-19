@@ -1,0 +1,102 @@
+{
+  "schema_version": "0.2.0",
+  "mode": "audit",
+  "capability": "full",
+  "dimensions": {
+    "visual_quality": {
+      "status": "supported",
+      "summary": "排版与视觉层级在模拟中清晰",
+      "evidence_ids": [
+        "E-PRETTY"
+      ],
+      "limitations": "本例仅测试证据契约"
+    },
+    "usability": {
+      "status": "supported",
+      "summary": "模拟任务显示提交无法完成，需要修复",
+      "evidence_ids": [
+        "E-TASK",
+        "E-CODE"
+      ],
+      "limitations": "不是真实网站实测"
+    },
+    "design_identity": {
+      "status": "not_assessed",
+      "summary": "品牌定位尚无充分资料",
+      "evidence_ids": [],
+      "limitations": "未提供品牌文件"
+    }
+  },
+  "evidence": [
+    {
+      "id": "E-PRETTY",
+      "kind": "screenshot",
+      "status": "observed",
+      "locator": "fixtures/form-look (假设性测试输入)",
+      "detail": "模拟截图显示排版精致，视觉成功不能证明提交成功"
+    },
+    {
+      "id": "E-TASK",
+      "kind": "task_test",
+      "status": "observed",
+      "locator": "fixtures/submit-flow (假设性测试输入)",
+      "detail": "模拟任务：输入合法数据→点击提交→预期有成功反馈，实际无响应"
+    },
+    {
+      "id": "E-CODE",
+      "kind": "source_code",
+      "status": "observed",
+      "locator": "fixtures/form-handler.ts:20 (假设性测试输入)",
+      "detail": "构造测试场景中提交处理未被绑定"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-SUBMIT",
+      "dimension": "usability",
+      "layer": "FLOOR",
+      "location": "表单提交按钮",
+      "observation": "合法输入后点击无反馈",
+      "impact": "关键提交任务阻断",
+      "evidence_ids": [
+        "E-TASK",
+        "E-CODE"
+      ],
+      "alternative_explanation": "可能是权限或网络错误；需结合处理函数和日志检查",
+      "decision": "change",
+      "priority": "P0",
+      "task_failure": true,
+      "minimal_change": "绑定正确提交处理并补全反馈",
+      "recheck": "以同样输入和网络环境重放提交并记录结果"
+    },
+    {
+      "id": "F-LOOK",
+      "dimension": "visual_quality",
+      "layer": "POLISH",
+      "location": "表单标题与正文",
+      "observation": "视觉层级清晰且未妨碍任务",
+      "impact": "可保留已有视觉资产",
+      "evidence_ids": [
+        "E-PRETTY"
+      ],
+      "alternative_explanation": "仅截图无法证明其他状态完整",
+      "decision": "retain",
+      "priority": "P3",
+      "minimal_change": "无需修改",
+      "recheck": "修复提交时确保视觉未回归"
+    }
+  ],
+  "retained": [
+    {
+      "choice": "表单标题排版",
+      "reason": "无需因提交问题修改无关视觉",
+      "evidence_ids": [
+        "E-PRETTY"
+      ]
+    }
+  ],
+  "unverified": [
+    "该示例是为了测试决策约束而构造，不是现实产品的测试结果"
+  ],
+  "project": "示例：视觉精致但无法提交的表单"
+}

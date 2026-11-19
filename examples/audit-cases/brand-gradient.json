@@ -1,0 +1,78 @@
+{
+  "schema_version": "0.2.0",
+  "mode": "audit",
+  "capability": "partial",
+  "dimensions": {
+    "visual_quality": {
+      "status": "supported",
+      "summary": "本例中设计保持既定配色和阅读层级",
+      "evidence_ids": [
+        "E-SCREEN"
+      ],
+      "limitations": "仅针对测试输入的假设"
+    },
+    "usability": {
+      "status": "not_assessed",
+      "summary": "未检查真实任务行为",
+      "evidence_ids": [],
+      "limitations": "未运行用户流程"
+    },
+    "design_identity": {
+      "status": "supported",
+      "summary": "品牌渐变符合测试条件中的品牌意图",
+      "evidence_ids": [
+        "E-BRAND",
+        "E-SCREEN"
+      ],
+      "limitations": "仅用于校验决策协议"
+    }
+  },
+  "evidence": [
+    {
+      "id": "E-BRAND",
+      "kind": "brand_asset",
+      "status": "observed",
+      "locator": "fixtures/brand-guide-example.md (假设性测试资料)",
+      "detail": "在此虚构测试中，品牌规范明确将紫色渐变设为识别资产；此证据并非真实客户资料"
+    },
+    {
+      "id": "E-SCREEN",
+      "kind": "screenshot",
+      "status": "observed",
+      "locator": "fixtures/brand-hero-example.png (测试假设)",
+      "detail": "为测试模拟的品牌首屏视觉观察，不声称真实截图存在"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-BRAND",
+      "dimension": "design_identity",
+      "layer": "TASTE",
+      "location": "首屏背景",
+      "observation": "使用紫色渐变，但作为品牌正式识别",
+      "impact": "无证据表明视觉妨碍任务",
+      "evidence_ids": [
+        "E-BRAND",
+        "E-SCREEN"
+      ],
+      "alternative_explanation": "它可能是 AI 默认渐变；不过假设性品牌规范明确支持",
+      "decision": "retain",
+      "priority": "P3",
+      "minimal_change": "无需修改",
+      "recheck": "如发生重品牌化再复核"
+    }
+  ],
+  "retained": [
+    {
+      "choice": "首屏品牌渐变",
+      "reason": "有独立品牌规范依据，不应机械套用反模板规则",
+      "evidence_ids": [
+        "E-BRAND"
+      ]
+    }
+  ],
+  "unverified": [
+    "此为构造测试而非实站审计，没有真实截图或用户研究"
+  ],
+  "project": "示例：品牌渐变落地页"
+}

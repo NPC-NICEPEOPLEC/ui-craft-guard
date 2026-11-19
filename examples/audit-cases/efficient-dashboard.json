@@ -1,0 +1,89 @@
+{
+  "schema_version": "0.2.0",
+  "mode": "audit",
+  "capability": "full",
+  "dimensions": {
+    "visual_quality": {
+      "status": "supported",
+      "summary": "视觉克制与高频数据扫描相匹配",
+      "evidence_ids": [
+        "E-DASH"
+      ],
+      "limitations": "此为假设性测试输入"
+    },
+    "usability": {
+      "status": "supported",
+      "summary": "示例中的查找任务顺利完成",
+      "evidence_ids": [
+        "E-FLOW"
+      ],
+      "limitations": "不代表真实产品用户研究"
+    },
+    "design_identity": {
+      "status": "supported",
+      "summary": "密度和朴素性是有意的产品选择",
+      "evidence_ids": [
+        "E-BRIEF",
+        "E-DASH"
+      ],
+      "limitations": "仅针对模拟任务"
+    }
+  },
+  "evidence": [
+    {
+      "id": "E-BRIEF",
+      "kind": "brief",
+      "status": "observed",
+      "locator": "fixtures/dashboard-brief (假设性测试输入)",
+      "detail": "虚构任务简报：高频操作人员优先效率与可扫描性"
+    },
+    {
+      "id": "E-DASH",
+      "kind": "screenshot",
+      "status": "observed",
+      "locator": "fixtures/dashboard-view (假设性测试输入)",
+      "detail": "结构化高密度表格及清晰状态，不存在必须添加插画的依据"
+    },
+    {
+      "id": "E-FLOW",
+      "kind": "task_test",
+      "status": "observed",
+      "locator": "fixtures/dashboard-flow (假设性测试输入)",
+      "detail": "虚构测试输入：搜索→筛选→查看结果均按预期完成；不是本项目真实自动化测试"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-DASH",
+      "dimension": "design_identity",
+      "layer": "TASTE",
+      "location": "数据总览页",
+      "observation": "没有大面积插画或渐变",
+      "impact": "减少干扰并支持任务效率",
+      "evidence_ids": [
+        "E-BRIEF",
+        "E-DASH",
+        "E-FLOW"
+      ],
+      "alternative_explanation": "也可能是尚未设计的默认后台；但任务与简报支持这种密度",
+      "decision": "retain",
+      "priority": "P3",
+      "minimal_change": "无需改变",
+      "recheck": "真实用户反馈出现扫描困难时复核"
+    }
+  ],
+  "retained": [
+    {
+      "choice": "克制的工具型视觉语言",
+      "reason": "与高频操作任务与模拟简报一致",
+      "evidence_ids": [
+        "E-BRIEF",
+        "E-DASH"
+      ]
+    }
+  ],
+  "unverified": [
+    "合约示例中的测试步骤为假设，并非实际浏览器运行"
+  ],
+  "project": "示例：高频运营数据后台"
+}
