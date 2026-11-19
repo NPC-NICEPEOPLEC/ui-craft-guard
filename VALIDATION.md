@@ -50,4 +50,7 @@ python3 scripts/audit_ui.py examples/revised.html --format markdown
 
 - 变更内容：独立 finding_id/rule_id、FLOOR/STRUCTURE/TASTE/POLISH 覆盖记录、完整 README 定位与离线 ZIP 用户级安装器。
 - 旧版 0.2.0 JSON 仍使用原有字段的兼容读取路径；新格式 0.2.1 将由 CI 的结构测试验证。
-- 该补丁的实际 PR/合并提交、GitHub Actions 回执需在运行完成后补录；**此前不能标记为成功**。
+- **实际部署回执**：PR [#2](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/pull/2) 已合并；main 合并提交 [3eab43e](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/commit/3eab43e959b1819d247b33fffdc6368f37350394)。
+- **合并后的 GitHub Actions 成功**：[skill-validation #44491350215](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/actions/runs/44491350215)，实际 job logs 显示 24 项 Python 单元测试通过、3 组 JSON 合约案例 PASS、Skill 格式及引用校验 PASS。
+- **远端回读**：`skills/ui-craft-guard/VERSION` 为 `0.2.1`；`SKILL.md`、四层覆盖协议、Rulebook、报告模板、便携验证脚本和离线更新器均存在。
+- **仍待实际确认**：用户 Mac 中三套技能位置是否已更新、客户端是否重新加载，以及此 Skill 在真实项目上的审计质量；本次合成案例和 CI 不能证明这些事项。
