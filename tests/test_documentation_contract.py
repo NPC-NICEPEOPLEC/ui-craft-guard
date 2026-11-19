@@ -62,7 +62,7 @@ class DocumentationContractTests(unittest.TestCase):
         demo = read("examples/workflow-walkthrough.md")
         self.assertIn("不是真实网站盲测", demo)
         self.assertIn("不是本次 Skill v0.2.2 的新真实项目实验", demo)
-        self.assertIn("浏览器历史检查记录", demo)
+        self.assertIn("已保存的历史检查记录", demo)
         self.assertIn("未完成", demo)
         self.assertIn("scanner" if "scanner" in demo else "启发式信号编号", demo)
 
