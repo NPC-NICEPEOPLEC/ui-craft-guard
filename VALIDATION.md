@@ -60,4 +60,8 @@ python3 scripts/audit_ui.py examples/revised.html --format markdown
 - 范围：四阶段 Prompt Recipes、README 快速入口、原创教学演练、文档权威来源与维护检查表、版本一致性校验、文档回归测试。
 - 原有四层/三维审计框架及 `finding_id / rule_id`、JSON `schema_version=0.2.1` 不变。
 - 原创演示页面的 Chromium 历史记录不能冒充本次新版在真实网站上的完整自主审计；真实客户站点盲测、独立审美评判及用户研究仍**未完成**。
-- CI 与 PR 真实执行结果：本段后续需在成功回读后补录，不能预先标记通过。
+- **实际合并**：[PR #3](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/pull/3) 已合并至 main，合并提交 [8ce7195](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/commit/8ce7195c390413e737806a919fd47147e227f47d)。
+- **真实 GitHub Actions 检查**：PR [#44496329717](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/actions/runs/44496329717) 和合并后 main [#44496391255](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/actions/runs/44496391255) 均 success；实际 job logs 为 **30 项 Python 单元测试通过、3 组审计 JSON 合约案例 PASS、Skill 文件结构校验 PASS**。
+- **红灯记录没有隐藏**：最初三次文档测试运行 [#44495704859](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/actions/runs/44495704859)、[#44495734304](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/actions/runs/44495734304)、[#44495796034](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/actions/runs/44495796034) 失败，原因是新文档测试对措辞的断言与文档实际文字不一致；调整断言及补充“真实网站盲测未完成”后复跑通过。这些失败不是 UI 网站回归故障。
+- **远端回读**：main 的 `skills/ui-craft-guard/VERSION` 为 `0.2.2`；README、四阶段 Prompt Recipes、独立真实网站盲测协议、贡献维护规则、离线安装器和 6 个新增文档契约测试均存在；Skill 原有四层和三维架构保留。
+- **未验证范围**：当前新版没有在真实客户网站上完成盲审与独立评估；未证明用户本机 0.2.2 已安装或客户端已经加载。本次为仓库、文档与协议的验收。
