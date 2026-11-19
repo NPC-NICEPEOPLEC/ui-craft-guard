@@ -39,6 +39,9 @@ python3 scripts/audit_ui.py examples/revised.html --format markdown
 - `scripts/validate_report.py` 只验证审计 JSON 的结构和证据前置条件，不验证真实品牌、截图、UX 或用户研究。
 - 三组 JSON 案例是**合成测试输入**，其中的“observed”仅指测试场景内的假设证据，绝不是对具体网站运行的事实陈述。
 - v0.1.0 的截图与 Playwright 冒烟测试作为历史事实保留；不能冒充已验证新版设计判断能力。
-- 2026-11-19 的 v0.2 CI 与远端发布证据，须以实际 workflow run/commit 记录为准；未运行前不标记通过。
+- **v0.2.0 真实验收完成**：PR [#1](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/pull/1) 已合并到 `main`；合并提交 [2d3150e](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/commit/2d3150ef6fb376b7d75a6b6f9435d09ab7e3ab82)。
+- 合并后 `main` 的 [skill-validation #44481809467](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/actions/runs/44481809467) **success**：Skill 入口/引用校验、3 组 JSON 合约案例、17 项 Python 单元测试均通过（已读取实际 job logs）。
+- [PR 检查 #44481769156](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/actions/runs/44481769156) 也 success；远端 v0.2 Skill 目录包含 `SKILL.md`、3 个新增参考文档、2 份模板与 2 份内置运行脚本。
+- **尚未验证**用户个人 Mac 中的三处技能目录升级、ChatGPT 私人 Plugin 的安装和真实站点的自动化设计评估；不能将示例合约通过等同实站审美评审。
 
 - v0.2.0 可移植性：Skill 目录内自带两份运行脚本，安装器支持 dsh/codex/claude 三种目录，且不覆盖已存在 Skill；真实 CI 检查见对应版本提交记录。
