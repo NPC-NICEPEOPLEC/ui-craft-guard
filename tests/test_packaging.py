@@ -1,6 +1,7 @@
 """Installed skill must be self-contained and preserve existing folders."""
 from pathlib import Path
 import subprocess
+import os
 import tempfile
 import unittest
 
@@ -13,6 +14,25 @@ class PortableInstallTests(unittest.TestCase):
             with self.subTest(name=name):
                 self.assertEqual((ROOT / "scripts" / name).read_bytes(),
                                  (ROOT / "skills/ui-craft-guard/scripts" / name).read_bytes())
+
+    def test_user_level_upgrader_backs_up_and_installs_three_clients(self):
+        with tempfile.TemporaryDirectory() as home:
+            for segment in (".dsh", ".agents", ".claude"):
+                dest = Path(home) / segment / "skills" / "ui-craft-guard"
+                dest.mkdir(parents=True)
+                (dest / "OLD-MARKER").write_text("0.2.0", encoding="utf-8")
+            env = dict(os.environ, HOME=home)
+            command = ["bash", str(ROOT / "scripts/update_user_skills.sh")]
+            result = subprocess.run(command, env=env, capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            for segment in (".dsh", ".agents", ".claude"):
+                parent = Path(home) / segment / "skills"
+                dest = parent / "ui-craft-guard"
+                self.assertEqual((dest / "VERSION").read_text().strip(), "0.2.1")
+                self.assertTrue((dest / "scripts/validate_report.py").is_file())
+                backups = list(parent.glob("ui-craft-guard.backup-*"))
+                self.assertEqual(len(backups), 1)
+                self.assertTrue((backups[0] / "OLD-MARKER").is_file())
 
     def test_three_client_locations_and_no_overwrite(self):
         for client, subdir in (("dsh", ".dsh"), ("codex", ".agents"), ("claude", ".claude")):

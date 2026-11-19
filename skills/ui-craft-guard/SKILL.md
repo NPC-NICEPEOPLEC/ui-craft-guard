@@ -1,13 +1,13 @@
 ---
 name: ui-craft-guard
 description: >-
-  Audit, redesign and build web/app interfaces with grounded visual taste instead of generic AI-looking defaults. Use for UI 去 AI 味, AI slop, vibe-coded UI polish, screenshot critique, visual hierarchy, typography, Chinese UI typesetting, color, spacing, radii, motion, component states, or before/after design audits. Read this skill before modifying existing UI; preserve product intent, brand, access and working interactions.
+  Audit, redesign, compare and build web/app UIs with four-layer review (FLOOR, STRUCTURE, TASTE, POLISH), three independent evaluation dimensions (visual quality, usability, design identity), traceable evidence and product intent. Use for website UI/UX diagnosis, UI 去 AI 味, AI slop, screenshot critique, design systems, typography, Chinese UI, accessibility, interactions and before/after audits. Preserve brand intent and working behavior.
 license: MIT
 ---
 
-# UI Craft Guard — 从“去 AI 味”到有依据的 UI 设计判断
+# UI Craft Guard — 以四层审计和可验证证据改进 UI 设计
 
-你是 **设计审查者 + 谨慎实现者**，不是“把所有页面变成同一种极简风格”的美化器。目标是降低模型惯性产生的模板痕迹，同时提高任务完成率、辨识度、一致性和可访问性。
+你是 **设计审查者 + 谨慎实现者**，不是“把所有页面变成同一种极简风格”的美化器。首要目标是帮助用户发现、判断并验证界面问题，提高任务完成率、辨识度、一致性和可访问性；识别 AI 模板惯性只是 TASTE 层可能涉及的其中一类问题。
 
 ## 触发和模式
 
@@ -27,7 +27,13 @@ license: MIT
 
 **不要把审美偏好伪装成标准**：0.5px 描边、纯黑白灰、最多 3 种字号、250ms 动效都是可选起点，不是普适强制。必要时主动记录不采用某条建议的原因。
 
-## v0.2.0：三层机制、三维结论、四层问题分类
+## v0.2.1：四层审计是骨架，三维评价是视角，证据/意图决定行动
+
+**不是新三层代替旧四层**。v0.1.0 的 `FLOOR → STRUCTURE → TASTE → POLISH` 继续是扫描与归因的完整框架：先逐层检查是否存在问题，并记录每层 `assessed` 或 `not_assessed`，无问题可写“已审视、未发现”，不得为了填满表格编造缺陷。
+
+在四层结果之上，交叉独立评价 `visual_quality / usability / design_identity`；这是三个评价角度，而不是新的问题层级。判断、证据和设计意图三项机制服务于全部四层与全部三个维度，不是另一个替代性审计流程。
+
+Skill 的当前版本写在同目录 `VERSION` 文件中，升级时应核对该文件及相关引用是否同步更新。
 
 - **审计判断层**：先理解产品任务，独立评价 `visual_quality`（视觉质量）、`usability`（使用体验）、`design_identity`（设计个性与产品定位）。三个维度都要独立说明 observed / hypothesis / not_assessed，**禁止合成 UI 总分**。
 - **可验证证据层**：所有发现绑定可追踪 Evidence ID（种类、来源位置、实际观察、验证状态）；工具扫描只是线索。没有实际运行页面或任务，就不声称通过。
@@ -57,7 +63,9 @@ license: MIT
 
 详细指引见 [references/design-principles.md](references/design-principles.md)。
 
-### 3. 三维独立审计 → 四层归因 → 证据门槛 → 优先级
+### 3. 四层覆盖检查 → 三维独立评价 → 规则归因与证据门槛
+
+**先逐层核对 FLOOR / STRUCTURE / TASTE / POLISH。** 每层记录 `layer_coverage`：检查范围、真实证据、`assessed` / `not_assessed`，若未检查写明缺什么。某层没发现问题不代表漏检；不能强迫每层至少有一条问题。然后从三个维度解释已观察到的现象：
 
 先分别回答：
 
@@ -65,13 +73,13 @@ license: MIT
 - **使用体验**：谁要做什么任务，阻塞发生在哪一步，是否有实际重放记录？未经执行不能宣称功能失败或通过。
 - **设计个性与定位**：视觉选择怎样支持/违背真实产品意图？有哪些替代解释？有品牌证据时允许直接保留；缺资料时先 investigate。
 
-每个发现再归入 `FLOOR / STRUCTURE / TASTE / POLISH` 四层：
+每个发现对应以下四层中的**一层**（同一现象可从多个评价维度解释，但不要遗漏四层覆盖记录）：
 - **FLOOR**：阅读、键盘、对比度、表单标签、错误反馈、链接、禁用/加载状态；不能为了去 AI 味牺牲。
 - **STRUCTURE**：首要操作、视觉层级、信息顺序、过长文案、重复决策、移动端溢出。
 - **TASTE**：无依据渐变、卡片套卡片、过多强调色、模板式素材、字体/半径/阴影不统一。
 - **POLISH**：光学对齐、内外圆角关系、微边框、图标质量、转场节制、语言适配。
 
-每个问题写成 `{id, 维度, 层级, 位置, Evidence IDs, 影响, 最强反证, change/retain/investigate, 最小调整, 验证}`。只有真实观察支持的结论才能建议 `change`；仅靠静态反模板扫描不可直接修改。设计个性要修改，必须有实际品牌/用户定位证据；否则先调查。保留项同样需要解释。参见 [templates/AUDIT_REPORT.md](templates/AUDIT_REPORT.md)；可选机器可读记录以本 Skill 目录内的 `scripts/validate_report.py` 校验，但该工具不判断审美真实性。
+每个发现写成 `{finding_id, rule_id, dimension, layer, location, evidence_ids, impact, alternative_explanation, decision, minimal_change, recheck}`。其中 **`finding_id` 是本次具体发现的唯一编号**，**`rule_id` 是 [references/design-principles.md](references/design-principles.md) 中已定义的原始规则编号**（如 G02、I02、F02），不得混淆；产品特有规则用 `PROJECT:slug` 标明，不得伪称出自规则库。四层覆盖情况用独立 `layer_coverage` 记录。只有真实观察支持的结论才能建议 `change`；仅靠静态反模板扫描不可直接修改。设计个性要修改，必须有实际品牌/用户定位证据；否则先调查。保留项同样需要解释。参见 [templates/AUDIT_REPORT.md](templates/AUDIT_REPORT.md)；可选机器可读记录以本 Skill 目录内的 `scripts/validate_report.py` 校验，但该工具不判断审美真实性。
 
 ### 4. 小范围变更，保护已有效的选择
 
@@ -90,15 +98,16 @@ license: MIT
 
 ### 6. 交付
 
-始终分开输出三个评价维度，不用一个模糊的设计质量分。注明：证据能力等级、Evidence 索引、每维结论、发现及决策、保留项、需复查事项。
+先呈现四层检查覆盖记录，再分别输出三个评价维度，不用一个模糊的设计质量分。注明：证据能力等级、Evidence 索引、每维结论、发现及决策、保留项、需复查事项。
 
 依模式输出：
-- `audit`：三维独立结论、证据清单、问题优先级、最值得先改的三处、明确保留项和反证；不改文件。
+- `audit`：四层覆盖表、三维独立结论、各问题的 finding_id 与 rule_id、证据清单、问题优先级、最值得先改的三处、保留项和反证；不改文件。
 - `redesign/build`：设计目标、已改文件、前后对比、通过的检查、未通过或未执行的测试、剩余风险。
 - `compare`：保持/改进/退化的证据，不预设新版更好。
 
 ## 防误用护栏
 
+- **不得**以三个审计维度替代四层覆盖检查，或因为没有问题就虚构问题；
 - **不得**将三个审计维度合成一个虚假的客观总分；缺少反证、品牌依据时不得直接否决设计。
 - **不得**凭“看起来像 AI”判定代码的真实作者；`AI 味`仅指某些高频视觉模式。
 - **不得**凭 grep 自动重构布局；静态脚本只报可复查线索，视觉关系要看渲染结果。
