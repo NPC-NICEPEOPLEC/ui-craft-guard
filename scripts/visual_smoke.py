@@ -15,7 +15,7 @@ OUT.mkdir(exist_ok=True)
 RESULTS = []
 
 with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True, executable_path=os.environ.get("CHROMIUM_PATH", "/usr/bin/chromium"), args=["--no-sandbox"])
+    browser = p.chromium.launch(headless=True, executable_path=os.environ.get("CHROMIUM_PATH") or p.chromium.executable_path, args=["--no-sandbox"])
     for width, label in ((375, "mobile"), (768, "tablet"), (1280, "desktop")):
         page = browser.new_page(viewport={"width": width, "height": 900}, device_scale_factor=1)
         page.set_content((ROOT / "examples/revised.html").read_text(encoding="utf-8"), wait_until="load")

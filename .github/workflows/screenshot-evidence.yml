@@ -1,0 +1,35 @@
+name: screenshot-evidence
+on:
+  push:
+    paths:
+      - 'examples/anti-pattern.html'
+      - 'examples/revised.html'
+      - 'scripts/visual_smoke.py'
+      - '.github/workflows/screenshot-evidence.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  render:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Chromium
+        run: |
+          python3 -m pip install playwright==1.56.0
+          python3 -m playwright install --with-deps chromium
+      - name: Render and test examples
+        run: python3 scripts/visual_smoke.py
+      - name: Publish generated screenshots
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add examples/screenshots/
+          if ! git diff --cached --quiet; then
+            git commit -m "docs: publish reproduced Chromium screenshots"
+            git push origin HEAD:main
+          fi
