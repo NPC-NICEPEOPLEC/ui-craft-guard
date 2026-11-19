@@ -15,6 +15,15 @@ bash scripts/install.sh codex .
 bash scripts/install.sh claude /path/to/project
 ```
 
+如要安装到三个**用户级**技能目录（须在自己的 Mac 终端执行；已存在的同名技能会被拒绝覆盖）：
+
+```bash
+bash scripts/install.sh dsh "$HOME"
+bash scripts/install.sh codex "$HOME"
+bash scripts/install.sh claude "$HOME"
+```
+
+v0.2.0 的 `skills/ui-craft-guard/` 目录已**自带运行时脚本** `scripts/audit_ui.py` 和 `scripts/validate_report.py`，所以只复制这一个目录也能使用两种检查器。仓库根目录的同名脚本供项目 CI 使用；测试保证两边一致。
 对 AI 说：
 
 ```text
@@ -98,6 +107,8 @@ skills/ui-craft-guard/SKILL.md        # 代理入口
   references/tool-matrix.md           # 可选工具与能力边界
   templates/AUDIT_REPORT.md
   templates/DESIGN_DECISIONS.md
+  scripts/audit_ui.py                # 安装后仍可运行的扫描器
+  scripts/validate_report.py         # 安装后仍可运行的审计合约校验
 scripts/audit_ui.py                   # 纯标准库启发式扫描器
 scripts/visual_smoke.py               # 可选 Playwright 浏览器冒烟测试
 scripts/validate_skill.py             # 完整性检查
@@ -109,6 +120,7 @@ examples/case-study.md                # 规则归因和验收说明
 examples/audit-cases/*.json           # 3 个对照的决策测试样例
 tests/test_audit.py
 tests/test_report_contract.py          # 证据门槛、反证与反例测试
+tests/test_packaging.py                # 三客户端目录安装与脚本同一性测试
 .github/workflows/ci.yml
 ```
 

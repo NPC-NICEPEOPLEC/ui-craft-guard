@@ -40,3 +40,5 @@ python3 scripts/audit_ui.py examples/revised.html --format markdown
 - 三组 JSON 案例是**合成测试输入**，其中的“observed”仅指测试场景内的假设证据，绝不是对具体网站运行的事实陈述。
 - v0.1.0 的截图与 Playwright 冒烟测试作为历史事实保留；不能冒充已验证新版设计判断能力。
 - 2026-11-19 的 v0.2 CI 与远端发布证据，须以实际 workflow run/commit 记录为准；未运行前不标记通过。
+
+- v0.2.0 可移植性：Skill 目录内自带两份运行脚本，安装器支持 dsh/codex/claude 三种目录，且不覆盖已存在 Skill；真实 CI 检查见对应版本提交记录。

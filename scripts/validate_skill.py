@@ -19,7 +19,9 @@ REQUIRED = [
     "skills/ui-craft-guard/references/tool-matrix.md",
     "skills/ui-craft-guard/templates/AUDIT_REPORT.md",
     "skills/ui-craft-guard/templates/DESIGN_DECISIONS.md",
-    "scripts/validate_report.py", "tests/test_report_contract.py",
+    "scripts/validate_report.py", "tests/test_report_contract.py", "tests/test_packaging.py",
+    "skills/ui-craft-guard/scripts/audit_ui.py",
+    "skills/ui-craft-guard/scripts/validate_report.py",
     "examples/audit-cases/brand-gradient.json",
     "examples/audit-cases/efficient-dashboard.json",
     "examples/audit-cases/broken-submit.json",
@@ -51,6 +53,12 @@ def validate() -> list[str]:
                        "yanliudreamer", "ricouii", "remixdesigner"):
             if handle not in txt:
                 errors.append(f"Missing provenance for {handle}")
+    # Standalone installations copy only skills/ui-craft-guard: keep runtime tools in sync.
+    for script in ("audit_ui.py", "validate_report.py"):
+        original = ROOT / "scripts" / script
+        portable = SKILL.parent / "scripts" / script
+        if original.is_file() and portable.is_file() and original.read_bytes() != portable.read_bytes():
+            errors.append(f"Runtime copy is stale: {script}")
     return errors
 
 

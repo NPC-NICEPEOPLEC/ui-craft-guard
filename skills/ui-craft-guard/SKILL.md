@@ -71,7 +71,7 @@ license: MIT
 - **TASTE**：无依据渐变、卡片套卡片、过多强调色、模板式素材、字体/半径/阴影不统一。
 - **POLISH**：光学对齐、内外圆角关系、微边框、图标质量、转场节制、语言适配。
 
-每个问题写成 `{id, 维度, 层级, 位置, Evidence IDs, 影响, 最强反证, change/retain/investigate, 最小调整, 验证}`。只有真实观察支持的结论才能建议 `change`；仅靠静态反模板扫描不可直接修改。设计个性要修改，必须有实际品牌/用户定位证据；否则先调查。保留项同样需要解释。参见 [templates/AUDIT_REPORT.md](templates/AUDIT_REPORT.md)；可选机器可读记录以 `scripts/validate_report.py` 校验，但该工具不判断审美真实性。
+每个问题写成 `{id, 维度, 层级, 位置, Evidence IDs, 影响, 最强反证, change/retain/investigate, 最小调整, 验证}`。只有真实观察支持的结论才能建议 `change`；仅靠静态反模板扫描不可直接修改。设计个性要修改，必须有实际品牌/用户定位证据；否则先调查。保留项同样需要解释。参见 [templates/AUDIT_REPORT.md](templates/AUDIT_REPORT.md)；可选机器可读记录以本 Skill 目录内的 `scripts/validate_report.py` 校验，但该工具不判断审美真实性。
 
 ### 4. 小范围变更，保护已有效的选择
 
@@ -84,7 +84,7 @@ license: MIT
 
 ### 5. 验收必须包含行为和屏幕
 
-可用时运行 `python3 scripts/audit_ui.py <path> --format markdown`（脚本在仓库根目录，属于**启发式**，不是审美鉴定器）。
+可用时运行本 Skill 目录内的 `python3 scripts/audit_ui.py <path> --format markdown`（属于**启发式**，不是审美鉴定器）。安装到 `~/.dsh/skills/ui-craft-guard/`、`~/.agents/skills/ui-craft-guard/` 或 `~/.claude/skills/ui-craft-guard/` 后，以对应 Skill 目录为脚本起点；仓库开发可使用仓库根目录的同名脚本。
 
 在真实页面上至少检查：320/375、768、1280/1440 宽度；长中文标题、英文数字、极长列表、空/加载/错误态；键盘 Tab 焦点、表单校验、链接、点击/返回、必要时 reduced-motion；浅/深主题（项目支持时）。保存前后截图同视口同内容，审查 diff 和回归。缺少浏览器工具时列出**未验证项**。
 
