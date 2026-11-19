@@ -16,6 +16,8 @@ license: MIT
 - `build`：要求从零设计 UI；先任务与视觉方向，后组件与页面实现。
 - `compare`：提供修改前后截图；输出规则归因与差异，不用模糊夸赞。
 
+用户的**推荐四阶段操作**是“①自主诊断（audit）→ ②根因与设计推演（audit 的后续分析）→ ③获准的实施改进（redesign）→ ④批判性前后复查（compare）”；这是使用路径，**不是新增 Skill 模式**。具体可复制话术放在 [references/prompt-recipes.md](references/prompt-recipes.md)，本文件才是代理执行规范。全新界面另用 build。
+
 用户没有明确授权修改文件时，只交审计报告。用户明确要求动手时可直接执行，但先保留功能和现有品牌规则；危险、不可逆操作依宿主权限确认。
 
 ## 决策优先级（高 → 低）
@@ -27,19 +29,17 @@ license: MIT
 
 **不要把审美偏好伪装成标准**：0.5px 描边、纯黑白灰、最多 3 种字号、250ms 动效都是可选起点，不是普适强制。必要时主动记录不采用某条建议的原因。
 
-## v0.2.1：四层审计是骨架，三维评价是视角，证据/意图决定行动
+## 四层审计是骨架，三维评价是视角，证据/意图决定行动
 
 **不是新三层代替旧四层**。v0.1.0 的 `FLOOR → STRUCTURE → TASTE → POLISH` 继续是扫描与归因的完整框架：先逐层检查是否存在问题，并记录每层 `assessed` 或 `not_assessed`，无问题可写“已审视、未发现”，不得为了填满表格编造缺陷。
 
 在四层结果之上，交叉独立评价 `visual_quality / usability / design_identity`；这是三个评价角度，而不是新的问题层级。判断、证据和设计意图三项机制服务于全部四层与全部三个维度，不是另一个替代性审计流程。
 
-Skill 的当前版本写在同目录 `VERSION` 文件中，升级时应核对该文件及相关引用是否同步更新。
+Skill 的当前版本以同目录 `VERSION` 为准；审计 JSON 的 `schema_version=0.2.1` 是独立数据契约，不因文档小版本更新而自动变化。
 
-- **审计判断层**：先理解产品任务，独立评价 `visual_quality`（视觉质量）、`usability`（使用体验）、`design_identity`（设计个性与产品定位）。三个维度都要独立说明 observed / hypothesis / not_assessed，**禁止合成 UI 总分**。
+- **审计判断层**：先理解产品任务，独立评价 `visual_quality`（视觉质量）、`usability`（使用体验）、`design_identity`（设计个性与产品定位）。三个维度都要独立说明 supported / hypothesis / not_assessed；`observed` 是证据状态，不是评价维度状态，**禁止合成 UI 总分**。
 - **可验证证据层**：所有发现绑定可追踪 Evidence ID（种类、来源位置、实际观察、验证状态）；工具扫描只是线索。没有实际运行页面或任务，就不声称通过。
 - **设计意图层**：先看品牌/用户/内容目标，写设计意图假设、最强反证与保留条件，再决定 `change` / `retain` / `investigate`。**有理由不修改，就是合法且常见的好结果**。
-- 原有 `FLOOR / STRUCTURE / TASTE / POLISH` 继续是每个发现的**问题层级**，不替代三个评价维度。审计分类与决策分别记录，避免互相混淆。
-
 完整决策门槛见 [references/evidence-protocol.md](references/evidence-protocol.md)；定位和反证见 [references/design-intent.md](references/design-intent.md)；可选工具的能力边界见 [references/tool-matrix.md](references/tool-matrix.md)。
 
 ## 工作流（按序，不跳验证）
@@ -103,7 +103,7 @@ Skill 的当前版本写在同目录 `VERSION` 文件中，升级时应核对该
 依模式输出：
 - `audit`：四层覆盖表、三维独立结论、各问题的 finding_id 与 rule_id、证据清单、问题优先级、最值得先改的三处、保留项和反证；不改文件。
 - `redesign/build`：设计目标、已改文件、前后对比、通过的检查、未通过或未执行的测试、剩余风险。
-- `compare`：保持/改进/退化的证据，不预设新版更好。
+- `compare`：保持/改进/退化的证据，不预设新版更好；同一代理对自己修改做的比较是批判性自我复查，不得宣称为独立红队验收。
 
 ## 防误用护栏
 

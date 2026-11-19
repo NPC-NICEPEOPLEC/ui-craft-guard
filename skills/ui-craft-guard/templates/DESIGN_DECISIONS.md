@@ -1,4 +1,4 @@
-# Design Intent & Decisions — v0.2.0
+# Design Intent & Decisions — 设计意图与决策模板
 
 - 用户 / 主任务 / 会话目标：
 - 已有品牌定位（来源：brief/brand_asset/user_research/推断）：

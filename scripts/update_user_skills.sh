@@ -13,8 +13,8 @@ for file in VERSION SKILL.md references/design-principles.md references/evidence
 done
 
 version="$(cat "$source_dir/VERSION")"
-if [ "$version" != "0.2.1" ]; then
-  echo "ERROR: expected v0.2.1 ZIP, found $version; no local skill has been touched" >&2
+if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  echo "ERROR: malformed VERSION ($version); no local skill has been touched" >&2
   exit 1
 fi
 

@@ -28,7 +28,10 @@ class PortableInstallTests(unittest.TestCase):
             for segment in (".dsh", ".agents", ".claude"):
                 parent = Path(home) / segment / "skills"
                 dest = parent / "ui-craft-guard"
-                self.assertEqual((dest / "VERSION").read_text().strip(), "0.2.1")
+                self.assertEqual(
+                    (dest / "VERSION").read_text().strip(),
+                    (ROOT / "skills/ui-craft-guard/VERSION").read_text().strip(),
+                )
                 self.assertTrue((dest / "scripts/validate_report.py").is_file())
                 backups = list(parent.glob("ui-craft-guard.backup-*"))
                 self.assertEqual(len(backups), 1)
