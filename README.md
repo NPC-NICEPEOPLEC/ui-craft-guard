@@ -67,6 +67,7 @@ bash scripts/update_user_skills.sh
 
 - [可复现的四阶段教学演练](examples/workflow-walkthrough.md)：以仓库原创页面演示从诊断到复查，**不是**真实客户网站的盲测。
 - [原创建模前后对比](examples/case-study.md) · [浏览器历史检查记录](examples/screenshots/browser-smoke-results.json)
+- [真实网站盲测执行协议（尚未执行）](examples/real-site-evaluation-protocol.md)：记录发现率、误判、保留项、改版回归及独立复核，不冒充已完成的真实评测
 - [合成决策契约案例](examples/audit-cases)：验证“保留品牌渐变 / 保留高效后台 / 不忽略表单故障”的合约逻辑，**不是**真实用户研究。
 - [验证历史](VALIDATION.md) · [可选工具的能力边界](skills/ui-craft-guard/references/tool-matrix.md)
 
