@@ -1,4 +1,4 @@
-# UI Craft Guard — 审计报告模板 v0.2.1
+# UI Craft Guard — 审计报告模板（审计 JSON 契约 v0.2.1）
 
 - 项目 / 页面 / commit：
 - 模式：audit / redesign / build / compare

@@ -15,7 +15,7 @@
 bash scripts/update_user_skills.sh
 ```
 
-该脚本不联网；先检查完整 Skill 来源，再分别安装到：
+该脚本不联网；先检查完整 Skill 来源并读取 `VERSION`，再分别安装到（务必下载最新 ZIP，旧 ZIP 仍会安装它自身对应的旧版本）：
 
 ```text
 ~/.dsh/skills/ui-craft-guard/
@@ -38,7 +38,7 @@ for root in "$HOME/.dsh/skills" "$HOME/.agents/skills" "$HOME/.claude/skills"; d
 done
 ```
 
-当前期望版本 `0.2.1`。重新启动客户端后，实际验证其发现与调用能力；目录存在不代表客户端已加载。
+当前 Skill 版本请核对仓库的 [`VERSION`](skills/ui-craft-guard/VERSION)（本次文档更新为 `0.2.2`）；重新启动客户端后实际验证其发现与调用能力。审计 JSON 版本 `0.2.1` 是独立契约，不能误当 Skill 版本。
 
 ## 可选 Git / 首次安装
 

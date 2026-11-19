@@ -54,3 +54,10 @@ python3 scripts/audit_ui.py examples/revised.html --format markdown
 - **合并后的 GitHub Actions 成功**：[skill-validation #44491350215](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/actions/runs/44491350215)，实际 job logs 显示 24 项 Python 单元测试通过、3 组 JSON 合约案例 PASS、Skill 格式及引用校验 PASS。
 - **远端回读**：`skills/ui-craft-guard/VERSION` 为 `0.2.1`；`SKILL.md`、四层覆盖协议、Rulebook、报告模板、便携验证脚本和离线更新器均存在。
 - **仍待实际确认**：用户 Mac 中三套技能位置是否已更新、客户端是否重新加载，以及此 Skill 在真实项目上的审计质量；本次合成案例和 CI 不能证明这些事项。
+
+## v0.2.2 文档与使用手册迭代
+
+- 范围：四阶段 Prompt Recipes、README 快速入口、原创教学演练、文档权威来源与维护检查表、版本一致性校验、文档回归测试。
+- 原有四层/三维审计框架及 `finding_id / rule_id`、JSON `schema_version=0.2.1` 不变。
+- 原创演示页面的 Chromium 历史记录不能冒充本次新版在真实网站上的完整自主审计；真实客户站点盲测、独立审美评判及用户研究仍**未完成**。
+- CI 与 PR 真实执行结果：本段后续需在成功回读后补录，不能预先标记通过。

@@ -28,6 +28,8 @@ REQUIRED = [
     "examples/anti-pattern.html", "examples/revised.html", "examples/case-study.md",
     "scripts/audit_ui.py", "scripts/visual_smoke.py", "scripts/install.sh",
     "scripts/update_user_skills.sh", "skills/ui-craft-guard/VERSION", "tests/test_audit.py",
+    "tests/test_documentation_contract.py", "examples/workflow-walkthrough.md",
+    "examples/real-site-evaluation-protocol.md",
 ]
 
 
@@ -36,8 +38,19 @@ def validate() -> list[str]:
     if not SKILL.is_file():
         return errors + ["Missing SKILL.md"]
     version_file = SKILL.parent / "VERSION"
-    if version_file.is_file() and version_file.read_text(encoding="utf-8").strip() != "0.2.1":
-        errors.append("Wrong portable Skill version")
+    if version_file.is_file():
+        version = version_file.read_text(encoding="utf-8").strip()
+        if not re.fullmatch(r"\d+\.\d+\.\d+", version):
+            errors.append(f"Invalid portable Skill VERSION: {version}")
+        else:
+            readme = ROOT / "README.md"
+            changelog = ROOT / "CHANGELOG.md"
+            if readme.is_file() and f"v{version}" not in readme.read_text(encoding="utf-8"):
+                errors.append("README.md current Skill version must match VERSION")
+            if changelog.is_file() and not re.search(
+                rf"(?m)^## {re.escape(version)}\s+[—-]", changelog.read_text(encoding="utf-8")
+            ):
+                errors.append("CHANGELOG.md must contain current Skill version entry")
     data = SKILL.read_text(encoding="utf-8")
     if not data.startswith("---\n") or "\n---\n" not in data[4:]:
         errors.append("SKILL.md needs YAML frontmatter")
