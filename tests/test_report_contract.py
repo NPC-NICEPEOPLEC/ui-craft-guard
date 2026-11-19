@@ -74,6 +74,49 @@ class AuditContractTests(unittest.TestCase):
         self.assertTrue(any("aggregate UI quality score" in e
                             for e in checker.validate(report)))
 
+    def test_all_four_layers_must_be_reported(self):
+        report = fixture("brand-gradient.json")
+        self.assertEqual(set(report["layer_coverage"]), checker.LAYERS)
+        del report["layer_coverage"]["FLOOR"]
+        self.assertTrue(any("layer_coverage" in e for e in checker.validate(report)))
+
+    def test_assessed_layer_requires_real_evidence_reference(self):
+        report = fixture("efficient-dashboard.json")
+        report["layer_coverage"]["POLISH"]["status"] = "assessed"
+        errors = checker.validate(report)
+        self.assertTrue(any("assessed requires observed evidence" in e for e in errors))
+
+    def test_unassessed_layer_cannot_have_findings(self):
+        report = fixture("brand-gradient.json")
+        report["findings"][0]["layer"] = "STRUCTURE"
+        errors = checker.validate(report)
+        self.assertTrue(any("requires its layer_coverage to be assessed" in e for e in errors))
+
+    def test_finding_id_and_rule_id_are_distinct(self):
+        report = fixture("brand-gradient.json")
+        finding = report["findings"][0]
+        self.assertNotEqual(finding["finding_id"], finding["rule_id"])
+        self.assertEqual(finding["rule_id"], "G02")
+        del finding["rule_id"]
+        self.assertTrue(any("rule_id: required" in e for e in checker.validate(report)))
+
+    def test_only_known_or_namespaced_project_rules(self):
+        report = fixture("broken-submit.json")
+        f = report["findings"][0]
+        f["rule_id"] = "MADE-UP"
+        self.assertTrue(any("rule_id: unknown" in e for e in checker.validate(report)))
+        f["rule_id"] = "PROJECT:submit-handler"
+        self.assertEqual(checker.validate(report), [])
+
+    def test_v020_schema_stays_backward_compatible(self):
+        report = fixture("brand-gradient.json")
+        report["schema_version"] = "0.2.0"
+        del report["layer_coverage"]
+        for finding in report["findings"]:
+            finding["id"] = finding.pop("finding_id")
+            del finding["rule_id"]
+        self.assertEqual(checker.validate(report), [])
+
     def test_static_scan_alone_not_permission_to_change(self):
         report = fixture("broken-submit.json")
         bad = next(f for f in report["findings"] if f.get("task_failure"))

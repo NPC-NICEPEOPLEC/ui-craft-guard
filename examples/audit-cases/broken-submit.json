@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.2.0",
+  "schema_version": "0.2.1",
   "mode": "audit",
   "capability": "full",
   "dimensions": {
@@ -52,7 +52,6 @@
   ],
   "findings": [
     {
-      "id": "F-SUBMIT",
       "dimension": "usability",
       "layer": "FLOOR",
       "location": "表单提交按钮",
@@ -67,10 +66,11 @@
       "priority": "P0",
       "task_failure": true,
       "minimal_change": "绑定正确提交处理并补全反馈",
-      "recheck": "以同样输入和网络环境重放提交并记录结果"
+      "recheck": "以同样输入和网络环境重放提交并记录结果",
+      "finding_id": "F-SUBMIT",
+      "rule_id": "I02"
     },
     {
-      "id": "F-LOOK",
       "dimension": "visual_quality",
       "layer": "POLISH",
       "location": "表单标题与正文",
@@ -83,7 +83,9 @@
       "decision": "retain",
       "priority": "P3",
       "minimal_change": "无需修改",
-      "recheck": "修复提交时确保视觉未回归"
+      "recheck": "修复提交时确保视觉未回归",
+      "finding_id": "F-LOOK",
+      "rule_id": "T01"
     }
   ],
   "retained": [
@@ -98,5 +100,34 @@
   "unverified": [
     "该示例是为了测试决策约束而构造，不是现实产品的测试结果"
   ],
-  "project": "示例：视觉精致但无法提交的表单"
+  "project": "示例：视觉精致但无法提交的表单",
+  "layer_coverage": {
+    "FLOOR": {
+      "status": "assessed",
+      "summary": "构造测试的 FLOOR 层检查了列出的假设证据，不代表真实网站验收",
+      "evidence_ids": [
+        "E-TASK",
+        "E-CODE"
+      ]
+    },
+    "STRUCTURE": {
+      "status": "not_assessed",
+      "summary": "构造测试未检查 STRUCTURE 层",
+      "evidence_ids": [],
+      "limitations": "此案例未提供可核验的该层证据"
+    },
+    "TASTE": {
+      "status": "not_assessed",
+      "summary": "构造测试未检查 TASTE 层",
+      "evidence_ids": [],
+      "limitations": "此案例未提供可核验的该层证据"
+    },
+    "POLISH": {
+      "status": "assessed",
+      "summary": "构造测试的 POLISH 层检查了列出的假设证据，不代表真实网站验收",
+      "evidence_ids": [
+        "E-PRETTY"
+      ]
+    }
+  }
 }

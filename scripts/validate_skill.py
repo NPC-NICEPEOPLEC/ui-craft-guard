@@ -26,7 +26,8 @@ REQUIRED = [
     "examples/audit-cases/efficient-dashboard.json",
     "examples/audit-cases/broken-submit.json",
     "examples/anti-pattern.html", "examples/revised.html", "examples/case-study.md",
-    "scripts/audit_ui.py", "scripts/visual_smoke.py", "scripts/install.sh", "tests/test_audit.py",
+    "scripts/audit_ui.py", "scripts/visual_smoke.py", "scripts/install.sh",
+    "scripts/update_user_skills.sh", "skills/ui-craft-guard/VERSION", "tests/test_audit.py",
 ]
 
 
@@ -34,6 +35,9 @@ def validate() -> list[str]:
     errors = [f"Missing: {name}" for name in REQUIRED if not (ROOT / name).is_file()]
     if not SKILL.is_file():
         return errors + ["Missing SKILL.md"]
+    version_file = SKILL.parent / "VERSION"
+    if version_file.is_file() and version_file.read_text(encoding="utf-8").strip() != "0.2.1":
+        errors.append("Wrong portable Skill version")
     data = SKILL.read_text(encoding="utf-8")
     if not data.startswith("---\n") or "\n---\n" not in data[4:]:
         errors.append("SKILL.md needs YAML frontmatter")

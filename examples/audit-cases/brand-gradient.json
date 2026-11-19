@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.2.0",
+  "schema_version": "0.2.1",
   "mode": "audit",
   "capability": "partial",
   "dimensions": {
@@ -45,7 +45,6 @@
   ],
   "findings": [
     {
-      "id": "F-BRAND",
       "dimension": "design_identity",
       "layer": "TASTE",
       "location": "首屏背景",
@@ -59,7 +58,9 @@
       "decision": "retain",
       "priority": "P3",
       "minimal_change": "无需修改",
-      "recheck": "如发生重品牌化再复核"
+      "recheck": "如发生重品牌化再复核",
+      "finding_id": "F-BRAND",
+      "rule_id": "G02"
     }
   ],
   "retained": [
@@ -74,5 +75,33 @@
   "unverified": [
     "此为构造测试而非实站审计，没有真实截图或用户研究"
   ],
-  "project": "示例：品牌渐变落地页"
+  "project": "示例：品牌渐变落地页",
+  "layer_coverage": {
+    "FLOOR": {
+      "status": "not_assessed",
+      "summary": "构造测试未检查 FLOOR 层",
+      "evidence_ids": [],
+      "limitations": "此案例未提供可核验的该层证据"
+    },
+    "STRUCTURE": {
+      "status": "not_assessed",
+      "summary": "构造测试未检查 STRUCTURE 层",
+      "evidence_ids": [],
+      "limitations": "此案例未提供可核验的该层证据"
+    },
+    "TASTE": {
+      "status": "assessed",
+      "summary": "构造测试的 TASTE 层检查了列出的假设证据，不代表真实网站验收",
+      "evidence_ids": [
+        "E-BRAND",
+        "E-SCREEN"
+      ]
+    },
+    "POLISH": {
+      "status": "not_assessed",
+      "summary": "构造测试未检查 POLISH 层",
+      "evidence_ids": [],
+      "limitations": "此案例未提供可核验的该层证据"
+    }
+  }
 }

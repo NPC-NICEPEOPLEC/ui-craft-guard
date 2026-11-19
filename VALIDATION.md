@@ -5,7 +5,7 @@
 - 仓库： https://github.com/NPC-NICEPEOPLEC/ui-craft-guard
 - 权限：PUBLIC；默认分支：`main`。
 - Skill 主入口：`skills/ui-craft-guard/SKILL.md`。
-- 引用依赖：`references/` 6 份、`templates/` 2 份，已全部加入远端。
+- v0.1.0 最初参考文件为 6 份；v0.2.0 扩展为 `references/` 9 份、`templates/` 2 份，均已加入远端。
 - 其他：静态扫描器、安装脚本、测试、原创建模的 HTML、截图记录、许可证、贡献指南和工作流均已提交。
 - 四张 PNG 截图由 GitHub Actions 使用 Chromium 重新生成并提交到 `main`，不是只放在本地附件中。
 
@@ -45,3 +45,9 @@ python3 scripts/audit_ui.py examples/revised.html --format markdown
 - **尚未验证**用户个人 Mac 中的三处技能目录升级、ChatGPT 私人 Plugin 的安装和真实站点的自动化设计评估；不能将示例合约通过等同实站审美评审。
 
 - v0.2.0 可移植性：Skill 目录内自带两份运行脚本，安装器支持 dsh/codex/claude 三种目录，且不覆盖已存在 Skill；真实 CI 检查见对应版本提交记录。
+
+## v0.2.1 兼容性补丁的验收边界
+
+- 变更内容：独立 finding_id/rule_id、FLOOR/STRUCTURE/TASTE/POLISH 覆盖记录、完整 README 定位与离线 ZIP 用户级安装器。
+- 旧版 0.2.0 JSON 仍使用原有字段的兼容读取路径；新格式 0.2.1 将由 CI 的结构测试验证。
+- 该补丁的实际 PR/合并提交、GitHub Actions 回执需在运行完成后补录；**此前不能标记为成功**。

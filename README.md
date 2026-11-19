@@ -1,149 +1,133 @@
-# UI Craft Guard — 给 AI 编程代理一双会校准的设计眼睛
+# UI Craft Guard
 
-一个**可审计、可复查、按任务判断**的 UI 去 AI 味 Agent Skill。它不是“禁用紫色、圆角和渐变”的新模板，而是把八位设计作者相关公开讨论中的启发转成：**判断 → 证据 → 小步调整 → 真实验收**。
+**面向 AI 编程代理的 UI 设计审计、改进与验收 Skill。**
 
-> 版本：0.2.0 / 研究整理：2026-11-19。来源并非八条原帖全都直读；每位作者的核验等级、链接和边界见 [来源台账](skills/ui-craft-guard/references/source-ledger.md)。本项目不受这些作者赞助或认可。
+它的职责不是把所有网页改成同一种“没有 AI 味”的风格，而是：**理解产品与用户任务，逐层审查真实界面，找出有证据的问题，保留合理设计，并验证修改结果。** “去 AI 味”是审美诊断中的一个应用场景，不是唯一目标，也不是设计标准。
 
-## 快速使用
+> 当前版本：**v0.2.1** · 2026-11-19 · [SKILL.md](skills/ui-craft-guard/SKILL.md) · [更新记录](CHANGELOG.md) · [实际验收](VALIDATION.md)  
+> 便携式 Agent Skill；并非独立运行的网页应用，也不会因为公开 GitHub 仓库而自动安装到任何客户端。
 
-将 `skills/ui-craft-guard` 整个目录复制到 Agent 支持的 skills 位置（例如 Codex 项目的 `.agents/skills/ui-craft-guard/`，Claude Code 项目的 `.claude/skills/ui-craft-guard/`；具体路径以所用客户端为准）。
+## 它解决什么问题？
 
-```bash
-# 从仓库根目录执行；可选择 codex 或 claude 作为目标，默认当前项目
-bash scripts/install.sh codex .
-# 或
-bash scripts/install.sh claude /path/to/project
-```
+适合：网站正在开发，但开发者不知道哪里有问题；页面有“模板感”，却不知道源于布局、内容还是视觉；想修复现有界面但不破坏功能和品牌；需要用截图、代码和用户任务检查某次改版是否真的改善体验。
 
-如要安装到三个**用户级**技能目录（须在自己的 Mac 终端执行；已存在的同名技能会被拒绝覆盖）：
+工作方式是 **发现 → 证据 → 判断 → 最小调整 → 复查**。如果现有设计有明确产品理由，结论可以是“保留，不需要改”。
 
-```bash
-bash scripts/install.sh dsh "$HOME"
-bash scripts/install.sh codex "$HOME"
-bash scripts/install.sh claude "$HOME"
-```
-
-v0.2.0 的 `skills/ui-craft-guard/` 目录已**自带运行时脚本** `scripts/audit_ui.py` 和 `scripts/validate_report.py`，所以只复制这一个目录也能使用两种检查器。仓库根目录的同名脚本供项目 CI 使用；测试保证两边一致。
-对 AI 说：
+## 一张图理解审计体系
 
 ```text
-使用 ui-craft-guard 的 audit 模式，审查当前页面的 UI AI 味；先给出
-问题位置、证据、规则 ID、例外和验证方法，不要修改代码。
+产品与用户任务、品牌规范、现有界面
+                ↓
+① 四层审计骨架（来自 v0.1.0，完整保留）
+   FLOOR → STRUCTURE → TASTE → POLISH
+   每层记录：已检查 / 未检查；不要求每层都找出问题
+                ↓
+② 三个独立评价维度（v0.2.0 起）
+   视觉质量 / 使用体验 / 设计个性与产品定位
+   这是评价视角，不替代四层，也不合成一个总分
+                ↓
+③ 可追溯的证据与设计意图
+   finding_id（本次发现）→ rule_id（原始规则）
+   ↘ Evidence IDs（截图/源码/真实交互/品牌依据）
+                ↓
+④ 决策与回归
+   change（调整）/ retain（保留）/ investigate（待验证）
+   最小变更 → 相同条件复查
 ```
 
-或者：
+### ① 四层审计：查什么
 
-```text
-使用 ui-craft-guard 的 redesign 模式，保护已有功能和品牌，
-先审计再最小修复。请做中文长标题、移动端、空/错态及键盘回归，
-提供前后同视口截图；未运行的测试明确列出。
-```
-
-## v0.2.0：三层机制 + 三维独立结论
-
-设计 **判断层 → 证据层 → 意图层** 协作，但最终报告分别回答三个问题：
-
-| 独立维度 | 提问 | 支撑证据 |
+| v0.1.0 既有层级 | 检查范围 | 例子 |
 |---|---|---|
-| 视觉质量 `visual_quality` | 哪里存在比例、层级、排版、布局问题？ | 截图、源码、组件状态 |
-| 使用体验 `usability` | 哪个用户任务受阻、误解或增加成本？ | 交互任务回放、状态/焦点检查 |
-| 设计个性 `design_identity` | 视觉选择为什么符合或违背品牌与产品目标？ | 实际产品 brief、品牌资产、用户研究；没有则标假设 |
+| **FLOOR** · 基础底线 | 可阅读性、键盘、焦点、对比度、状态与错误反馈 | 表单提交后没有结果 |
+| **STRUCTURE** · 页面结构 | 信息优先级、操作入口、内容顺序、布局和响应式 | 手机首屏找不到主要操作 |
+| **TASTE** · 设计判断 | 风格与产品的匹配、组件语言、无依据的装饰和模板痕迹 | 视觉强调色竞争，或品牌渐变被误判 |
+| **POLISH** · 细节精修 | 字体、基线、图标、内外圆角、微动效及中文混排 | 卡片内外圆角冲突 |
 
-每条建议遵循 **判断 → 证据 → 最小调整 → 复查结果**；允许 `retain`（保留）和 `investigate`（待证），不因为紫色、渐变或朴素后台就强制美化。四层 FLOOR/STRUCTURE/TASTE/POLISH 保留，用于归类发现而非替代三维评价。详细约束见 [证据协议](skills/ui-craft-guard/references/evidence-protocol.md)、[设计意图与反证](skills/ui-craft-guard/references/design-intent.md)、[可选工具矩阵](skills/ui-craft-guard/references/tool-matrix.md)。
+原有 [规则库](skills/ui-craft-guard/references/design-principles.md) 和静态扫描器保留，**没有被三维评价替换**。检查过却没有问题的层级，应该记录“已检查，无明确发现”；没有检查能力时应写明缺口，不假装通过。
 
-**第一次使用（不知道哪里有问题时）**：
+### ② 三维评价：怎样解释问题
+
+| 独立维度 | 核心问题 |
+|---|---|
+| **visual_quality** · 视觉质量 | 当前布局、排版、层级和组件是否清晰、一致、协调？ |
+| **usability** · 使用体验 | 用户想做什么，在哪一步遇到阻碍或额外成本？ |
+| **design_identity** · 设计个性与定位 | 视觉选择是否有产品和品牌依据；哪些选择应该保留？ |
+
+三维与四层相互交叉。例如“手机表单无法完成”是 `usability × FLOOR`；“品牌渐变其实合理”是 `design_identity × TASTE`，决策可以是 `retain`。不要用一份模糊的“UI 总分”掩盖差异。
+
+### ③ 证据与决策：为什么这样判断
+
+每条发现至少说明 **本次编号 `finding_id`**、**规则来源 `rule_id`**、所属层级、评价维度、Evidence ID、最强合理反证、决策、优先级和复查方法。
+
+`rule_id` 使用原 [v0.1.0 规则表](skills/ui-craft-guard/references/design-principles.md) 中的 ID（如 `G02`、`F02`、`I02`）。如是项目自身规则，写 `PROJECT:slug`；**不能把本次问题编号冒充规则编号，也不能捏造规则来源**。详见 [证据协议](skills/ui-craft-guard/references/evidence-protocol.md) 和 [设计意图与反证](skills/ui-craft-guard/references/design-intent.md)。
+
+## 如何使用
+
+安装并确认客户端已加载 Skill 后，在项目上下文中输入：
 
 ```text
-使用 ui-craft-guard 的 audit 模式检查我的整个网站。先阅读产品目标、
-代码与已有品牌规范；具备浏览器时真实打开页面并验证主要任务。
-分别审计视觉质量、使用体验、设计个性。所有发现标注 Evidence ID、
-能力等级、最强反证、change/retain/investigate 与最小修复方案。
-请明确指出哪些现有设计值得保留；本轮只诊断，不修改代码。
+请使用 ui-craft-guard 的 audit 模式自主检查当前网站。
+我还不知道有哪些问题，请先了解产品、页面、代码和已有品牌规范；
+有浏览器能力时实际查看桌面/移动端并重放关键任务。
+
+先逐一核对 FLOOR、STRUCTURE、TASTE、POLISH 四层，
+记录已检查、未检查和真实证据；再从视觉质量、使用体验、
+设计个性三个维度独立评价。
+
+每条发现给独立 finding_id、原始 rule_id、Evidence ID、
+最强反证、change/retain/investigate、优先级与复查方案。
+明确指出哪些设计值得保留。本轮只审计，不修改代码。
 ```
 
-## 工作机制
+后续可使用四种模式：`audit`（只审计）、`redesign`（保护已有产品的改版）、`build`（从任务和设计意图出发构建）、`compare`（相同条件对比版本）。
 
-- **任务与来源优先**：明确页面的真实目标、用户、语言及品牌约束；保留已有设计系统。
-- **四层审计**：`FLOOR` 可用性底线 → `STRUCTURE` 信息与交互 → `TASTE` 模板惯性 → `POLISH` 几何细节。
-- **带出处的规则**：源码/截图证据 + ID + 例外；把“设计师经验”与 WCAG 这类规范分开。
-- **小步修复**：不把所有页面刷成另一个默认模板；不改无关功能。
-- **真实验收**：视口、中文、键盘、加载/错误、长内容与对比截图；若不能浏览器测试必须声明。
+[审计模板](skills/ui-craft-guard/templates/AUDIT_REPORT.md) · [设计决策模板](skills/ui-craft-guard/templates/DESIGN_DECISIONS.md) · [更多话术](skills/ui-craft-guard/references/prompt-recipes.md)
 
-## 工具和测试
+## 安装与更新
 
-仅依赖 Python 3 标准库（扫描器运行无需安装依赖）：
+**需要安装的是完整的 `skills/ui-craft-guard/` 目录，不是单独的 `SKILL.md`。** 它包含规则、模板、`VERSION` 和可独立运行的两个工具脚本。
+
+用户级路径：
+
+```text
+~/.dsh/skills/ui-craft-guard/
+~/.agents/skills/ui-craft-guard/
+~/.claude/skills/ui-craft-guard/
+```
+
+从旧版升级到当前版，推荐浏览器下载 [main.zip](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/archive/refs/heads/main.zip)，解压并进入仓库根目录执行：
 
 ```bash
-python3 scripts/audit_ui.py examples/anti-pattern.html --format markdown
-python3 scripts/audit_ui.py examples/revised.html --format json
+bash scripts/update_user_skills.sh
+```
+
+脚本**先复制校验，再备份旧版并替换**；不删除其他技能，不依赖 `git clone`。安装后查看三个目录的 `ui-craft-guard/VERSION`，应为 `0.2.1`。重新启动相关客户端再检查是否识别。详细见 [PUBLISH.md](PUBLISH.md)。
+
+项目级**首次安装**可使用 `scripts/install.sh`；该脚本遇到已有目标会拒绝覆盖，不能当升级工具。
+
+## 工具和证据边界
+
+核心脚本仅使用 Python 3 标准库：
+
+```bash
 python3 scripts/validate_skill.py
 python3 scripts/validate_report.py examples/audit-cases/*.json
 python3 -m unittest discover -s tests -v
+python3 scripts/audit_ui.py examples/anti-pattern.html --format markdown
 ```
 
-可选浏览器冒烟测试（本项目已用 Chromium 跑通，详见 `examples/screenshots/browser-smoke-results.json`）：
+- `audit_ui.py`：源码启发式扫描，**不是**自动审美评价或作者归因。
+- `validate_report.py`：检查规则编号、四层覆盖、证据引用与决策条件；**不核实**截图、品牌研究或任务是否真的执行。兼容旧版 v0.2.0 JSON。
+- `visual_smoke.py`：仓库内的可选 Playwright/Chromium 演示；真实项目必须自己定义实际页面和用户任务。
+- Lighthouse、axe-core、Storybook、design-extract 等是可选工具或方法参考，**不是已绑定的内置服务**。[工具职责表](skills/ui-craft-guard/references/tool-matrix.md)
 
-```bash
-# 需要 playwright Python 包与本机 Chromium；通过 CHROMIUM_PATH 覆盖位置
-python3 scripts/visual_smoke.py
-```
+[合成反例](examples/audit-cases) 用于验证“品牌渐变保留 / 简洁后台保留 / 关键表单故障修复”的决策协议，**不是**真实商业网站的运行记录。原创演示截图、历史测试与 CI 记录见 [VALIDATION.md](VALIDATION.md)。
 
-可检查 [修订前桌面截图](examples/screenshots/anti-pattern-desktop.png)、[修订后桌面截图](examples/screenshots/revised-desktop.png) 和 [修订后手机截图](examples/screenshots/revised-mobile.png)。
+## 来源、约束与许可证
 
-**扫描器和 JSON 合约校验都只做有限验证**。它不会计算渲染后嵌套圆角、实际色彩对比、React 状态或交互质量，更不是自动 WCAG 合规认证。它的误报需要人工复查。
+设计启发整理自公开讨论和工程实践；不是八篇原始帖子全部直读，也不代表原作者背书。作者、证据等级与核验范围见 [来源台账](skills/ui-craft-guard/references/source-ledger.md)。无障碍要求以 [WCAG 2.2](https://www.w3.org/TR/WCAG22/) 等规范为准。
 
-## 目录
+不得为了“去 AI 味”牺牲用户任务、品牌识别、可访问性与真实数据；不能伪造测试、品牌资产或第三方素材授权。**一个可解释、可验证的“保留”结论同样有价值。**
 
-```text
-skills/ui-craft-guard/SKILL.md        # 代理入口
-  references/source-ledger.md         # 八位作者、原帖镜像、可信度
-  references/design-principles.md     # 规则 ID、适用情形与反例
-  references/geometry-typography.md   # 同心圆角、字体/色彩 tokens
-  references/chinese-ui.md            # 中文排版专项
-  references/interaction-accessibility.md
-  references/prompt-recipes.md        # 可复制提示
-  references/evidence-protocol.md     # 证据约束与三维独立判断
-  references/design-intent.md         # 品牌定位、反证与保留机制
-  references/tool-matrix.md           # 可选工具与能力边界
-  templates/AUDIT_REPORT.md
-  templates/DESIGN_DECISIONS.md
-  scripts/audit_ui.py                # 安装后仍可运行的扫描器
-  scripts/validate_report.py         # 安装后仍可运行的审计合约校验
-scripts/audit_ui.py                   # 纯标准库启发式扫描器
-scripts/visual_smoke.py               # 可选 Playwright 浏览器冒烟测试
-scripts/validate_skill.py             # 完整性检查
-scripts/validate_report.py            # JSON 证据合约校验（非审美评分）
-scripts/install.sh                    # 本地安装
-examples/anti-pattern.html            # 人为制造的反模式例子
-examples/revised.html                 # 改进后的原创示例
-examples/case-study.md                # 规则归因和验收说明
-examples/audit-cases/*.json           # 3 个对照的决策测试样例
-tests/test_audit.py
-tests/test_report_contract.py          # 证据门槛、反证与反例测试
-tests/test_packaging.py                # 三客户端目录安装与脚本同一性测试
-.github/workflows/ci.yml
-```
-
-## 重要边界
-
-1. `0.5px` 细线、`250ms` 动画、纯中性色不是普适硬规则。对比度、焦点、真实文案与品牌优先。
-2. “不像 AI”不等于“设计优秀”，**没有唯一视觉风格**。静态扫描 0 告警不代表通过用户测试。三维独立评价，未运行不得声称实测；JSON 测试样例是构造数据，不是现场用户研究。
-3. 无第三方文章正文、截图或字体捆绑；规则均为原创概括，并保留出处。
-4. 本仓库仅是 Skill 和演示，不自动获取网站数据，不调用任何外部 API，也不自动修改用户项目。
-
-## 参考
-
-- [8 位作者入口推文](https://x.com/bruc3van/status/2115963644811116732)（X 可能要求登录）
-- [可读镜像及评论](https://instalker.org/bruc3van/status/2115963644811116732)
-- [Agent Skills Specification](https://agentskills.io/specification)
-- [WCAG 2.2](https://www.w3.org/TR/WCAG22/)
-- [Radix Colors](https://www.radix-ui.com/colors/docs/palette-composition/understanding-the-scale)
-- [MDN corner-shape](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/corner-shape)
-
-## License
-
-MIT，见 [LICENSE](LICENSE)。欢迎提交具有完整前后截图、规则依据和测试记录的改进。详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
-
-## 本次验证状态
-
-[本地与 GitHub 真实验收记录](VALIDATION.md)；[公开仓库同步、安装与复验说明](PUBLISH.md)。本项目已公开提交并通过格式/测试与 Chromium 截图工作流。GitHub 仓库发布不代表已在个人电脑或 ChatGPT 中安装。
+MIT License · [LICENSE](LICENSE) · [CONTRIBUTING.md](CONTRIBUTING.md)
