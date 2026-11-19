@@ -23,7 +23,7 @@ class DocumentationContractTests(unittest.TestCase):
     def test_readme_is_entrypoint_not_second_handbook(self):
         readme = read("README.md")
         self.assertIn("四层审计", readme)
-        self.assertIn("三维", readme)
+        self.assertIn("三个维度", readme)
         self.assertIn("prompt-recipes.md", readme)
         self.assertIn("SKILL.md", readme)
         self.assertIn("examples/workflow-walkthrough.md", readme)
@@ -54,7 +54,7 @@ class DocumentationContractTests(unittest.TestCase):
         for token in ("finding_id", "rule_id", "Evidence", "retain", "investigate"):
             self.assertIn(token, skill)
         self.assertIn("不是新增 Skill 模式", skill)
-        self.assertIn("不是独立红队验收", skill)
+        self.assertIn("不得宣称为独立红队验收", skill)
         self.assertIn("本轮只审计", recipes)
         self.assertIn("未确认的项目不擅自扩大范围", recipes)
 
