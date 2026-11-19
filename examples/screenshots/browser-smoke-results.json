@@ -1,0 +1,30 @@
+{
+  "browser": "Chromium",
+  "results": [
+    {
+      "viewport": 375,
+      "horizontal_overflow": false,
+      "submit": "PASS",
+      "count": "3 条收藏",
+      "keyboard_focus": "PASS",
+      "screenshot": "examples/screenshots/revised-mobile.png"
+    },
+    {
+      "viewport": 768,
+      "horizontal_overflow": false,
+      "submit": "PASS",
+      "count": "3 条收藏",
+      "keyboard_focus": "PASS",
+      "screenshot": "examples/screenshots/revised-tablet.png"
+    },
+    {
+      "viewport": 1280,
+      "horizontal_overflow": false,
+      "submit": "PASS",
+      "count": "3 条收藏",
+      "keyboard_focus": "PASS",
+      "screenshot": "examples/screenshots/revised-desktop.png"
+    }
+  ],
+  "limits": "No full WCAG/AT/contrast validation; local demo only."
+}
