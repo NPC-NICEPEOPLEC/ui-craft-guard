@@ -29,6 +29,7 @@ REQUIRED = [
     "scripts/audit_ui.py", "scripts/visual_smoke.py", "scripts/install.sh",
     "scripts/update_user_skills.sh", "skills/ui-craft-guard/VERSION", "tests/test_audit.py",
     "tests/test_documentation_contract.py", "examples/workflow-walkthrough.md",
+    "examples/real-site-evaluation-protocol.md",
 ]
 
 
