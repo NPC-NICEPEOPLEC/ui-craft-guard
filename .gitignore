@@ -1,6 +1,10 @@
 __pycache__/
-*.pyc
+*.py[cod]
 .pytest_cache/
 .DS_Store
-.playwright/
+.venv/
 node_modules/
+.playwright/
+.screenshots/
+*.local.html
+*.secret

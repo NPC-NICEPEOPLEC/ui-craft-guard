@@ -1,19 +1,26 @@
-# 交付与验收记录（2026-11-19）
+# UI Craft Guard 验收记录（2026-11-19）
 
-## 已完成
+## GitHub 公开同步：已验证
 
-- [x] 研究入口推文与 8 位作者，标出直接可读、转推全文、二次摘要及仅汇总帖转述。X 直接访问受 403 限制，见 source-ledger。
-- [x] 编写 Agent Skills 格式 `SKILL.md`、规则库、可用性/中文/几何专项、提示、报告模板。
-- [x] 实现无第三方依赖的静态 HTML/CSS 检查器、格式/引用校验器与 5 条标准库单测。
-- [x] 制作原创前后对比 HTML；在本机 Chromium 375、768、1280 宽度执行冒烟测试：无横向溢出，表单提交和列表数量更新通过，键盘首焦点存在可见样式；证据截图和 JSON 在 `examples/screenshots/`。
-- [x] 打包前真实执行静态扫描：反模式页报告信号；修订页未命中当前规则。
-- [x] 创建本地 `main` 分支及提交，便于校验和后续推送。
+- 仓库： https://github.com/NPC-NICEPEOPLEC/ui-craft-guard
+- 权限：PUBLIC；默认分支：`main`。
+- Skill 主入口：`skills/ui-craft-guard/SKILL.md`。
+- 引用依赖：`references/` 6 份、`templates/` 2 份，已全部加入远端。
+- 其他：静态扫描器、安装脚本、测试、原创建模的 HTML、截图记录、许可证、贡献指南和工作流均已提交。
+- 四张 PNG 截图由 GitHub Actions 使用 Chromium 重新生成并提交到 `main`，不是只放在本地附件中。
 
-## 明确未完成
+## GitHub Actions：实际通过
 
-- [ ] **没有在 GitHub 创建 PUBLIC 仓库、没有推送远端、没有可验收的公开 URL。** 已连接 GitHub 身份为 `NPC-NICEPEOPLEC`，但连接器只支持已有仓库文件/提交等操作，没有创建仓库动作；当前执行环境没有已认证的 GitHub CLI。查询 `NPC-NICEPEOPLEC/ui-craft-guard` 返回 404。
-- [ ] GitHub Actions CI 未实际执行（因为没有远端仓库）。
-- [ ] 未做跨浏览器、屏幕阅读器、完整 WCAG/对比度、真实用户测试；不能据静态扫描或 Chromium 冒烟测试宣称全面符合规范。
+- [skill-validation 成功记录](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/actions/runs/44470666035)：标准库单测 5 项及 Skill 格式/引用校验通过。
+- [screenshot-evidence 成功记录](https://github.com/NPC-NICEPEOPLEC/ui-craft-guard/actions/runs/44470666029)：Playwright/Chromium 安装、三个视口的实际操作冒烟测试与截图入库全部通过。
+- 截图工作流初次执行在 Ubuntu 26.04 上因 Playwright 系统支持失败；修正到 Ubuntu 24.04 后已复验成功。保留失败历史以便追溯。
+
+## 质量边界
+
+- 静态扫描针对示例故意放置的反模式给出信号；修订页没有命中当前选定信号。
+- Chromium 验证宽度：375px、768px、1280px，覆盖横向溢出、表单提交、列表数量变化和键盘焦点。
+- **未验证**完整 WCAG AA、屏幕阅读器、多浏览器、多操作系统及真实用户测试；因此不声称全面无障碍合规。
+- 本仓库公开同步与本机安装、ChatGPT Plugin 安装是独立事项；**不会因为仓库已公开就自动出现在用户的 ChatGPT/Claude/Codex 技能列表中**。
 
 ## 复现
 
@@ -22,8 +29,6 @@ python3 scripts/validate_skill.py
 python3 -m unittest discover -s tests -v
 python3 scripts/audit_ui.py examples/anti-pattern.html --format markdown
 python3 scripts/audit_ui.py examples/revised.html --format markdown
-# 可选：本地安装 playwright / Chromium 后运行
-python3 scripts/visual_smoke.py
 ```
 
-仓库发布步骤见 `PUBLISH.md`。**本记录只证明本地生成与测试，不可当作已完成 GitHub 发布的回执。**
+本机复制到 `~/.dsh/skills/`、`~/.agents/skills/` 和 `~/.claude/skills/` 的操作说明见 [PUBLISH.md](PUBLISH.md)。

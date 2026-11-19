@@ -105,4 +105,4 @@ MIT，见 [LICENSE](LICENSE)。欢迎提交具有完整前后截图、规则依�
 
 ## 本次验证状态
 
-[本地验证记录与远端发布限制](VALIDATION.md)；[发布操作说明](PUBLISH.md)。只有实际公开仓库可访问、GitHub Actions 运行成功后，才视为远端发布完成。
+[本地与 GitHub 真实验收记录](VALIDATION.md)；[公开仓库同步、安装与复验说明](PUBLISH.md)。本项目已公开提交并通过格式/测试与 Chromium 截图工作流。GitHub 仓库发布不代表已在个人电脑或 ChatGPT 中安装。
