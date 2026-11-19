@@ -27,3 +27,14 @@
 ## 原创性与署名规则
 
 本 Skill 是对多个公开讨论的**原创流程化归纳**，不是复制作者的提示词全文，也不宣称获得其背书。只保留必要的短摘要和可追踪 URL，不随仓库分发第三方截图、文章全文、图标或字体。若原始帖出现勘误，维护者应更新此台账、具体规则及变更日志。
+
+## v0.2.0 的方法参考（不同于上文 X 来源）
+
+2026-11-19 读取了以下公开仓库 README，用于**工作流分工**，不用于硬性审美打分，也不代表获得其作者认可：
+
+- [oil-oil/oil-ui](https://github.com/oil-oil/oil-ui)：单一明确视觉方向、需要时多个真正不同方向、真实浏览器截图迭代。
+- [rgranet/designlint-skill](https://github.com/rgranet/designlint-skill)：在编码前明确用户和设计决策，审计已有界面时主动批评。
+- [Manavarya09/design-extract](https://github.com/Manavarya09/design-extract)：观察现有 token 和 DOM 视觉语言的线索，必须与项目正式设计系统对照。
+- [uxuiprinciples/agent-skills](https://github.com/uxuiprinciples/agent-skills)：UX smells、界面评估和用户流程检查的拆分方式。
+
+这些项目本身的评分/榜单、Star 数和许可证不构成本 Skill 的质量证据；v0.2.0 未复制其原始代码或截图。 

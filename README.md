@@ -2,7 +2,7 @@
 
 一个**可审计、可复查、按任务判断**的 UI 去 AI 味 Agent Skill。它不是“禁用紫色、圆角和渐变”的新模板，而是把八位设计作者相关公开讨论中的启发转成：**判断 → 证据 → 小步调整 → 真实验收**。
 
-> 版本：0.1.0 / 研究整理：2026-11-19。来源并非八条原帖全都直读；每位作者的核验等级、链接和边界见 [来源台账](skills/ui-craft-guard/references/source-ledger.md)。本项目不受这些作者赞助或认可。
+> 版本：0.2.0 / 研究整理：2026-11-19。来源并非八条原帖全都直读；每位作者的核验等级、链接和边界见 [来源台账](skills/ui-craft-guard/references/source-ledger.md)。本项目不受这些作者赞助或认可。
 
 ## 快速使用
 
@@ -15,6 +15,15 @@ bash scripts/install.sh codex .
 bash scripts/install.sh claude /path/to/project
 ```
 
+如要安装到三个**用户级**技能目录（须在自己的 Mac 终端执行；已存在的同名技能会被拒绝覆盖）：
+
+```bash
+bash scripts/install.sh dsh "$HOME"
+bash scripts/install.sh codex "$HOME"
+bash scripts/install.sh claude "$HOME"
+```
+
+v0.2.0 的 `skills/ui-craft-guard/` 目录已**自带运行时脚本** `scripts/audit_ui.py` 和 `scripts/validate_report.py`，所以只复制这一个目录也能使用两种检查器。仓库根目录的同名脚本供项目 CI 使用；测试保证两边一致。
 对 AI 说：
 
 ```text
@@ -28,6 +37,28 @@ bash scripts/install.sh claude /path/to/project
 使用 ui-craft-guard 的 redesign 模式，保护已有功能和品牌，
 先审计再最小修复。请做中文长标题、移动端、空/错态及键盘回归，
 提供前后同视口截图；未运行的测试明确列出。
+```
+
+## v0.2.0：三层机制 + 三维独立结论
+
+设计 **判断层 → 证据层 → 意图层** 协作，但最终报告分别回答三个问题：
+
+| 独立维度 | 提问 | 支撑证据 |
+|---|---|---|
+| 视觉质量 `visual_quality` | 哪里存在比例、层级、排版、布局问题？ | 截图、源码、组件状态 |
+| 使用体验 `usability` | 哪个用户任务受阻、误解或增加成本？ | 交互任务回放、状态/焦点检查 |
+| 设计个性 `design_identity` | 视觉选择为什么符合或违背品牌与产品目标？ | 实际产品 brief、品牌资产、用户研究；没有则标假设 |
+
+每条建议遵循 **判断 → 证据 → 最小调整 → 复查结果**；允许 `retain`（保留）和 `investigate`（待证），不因为紫色、渐变或朴素后台就强制美化。四层 FLOOR/STRUCTURE/TASTE/POLISH 保留，用于归类发现而非替代三维评价。详细约束见 [证据协议](skills/ui-craft-guard/references/evidence-protocol.md)、[设计意图与反证](skills/ui-craft-guard/references/design-intent.md)、[可选工具矩阵](skills/ui-craft-guard/references/tool-matrix.md)。
+
+**第一次使用（不知道哪里有问题时）**：
+
+```text
+使用 ui-craft-guard 的 audit 模式检查我的整个网站。先阅读产品目标、
+代码与已有品牌规范；具备浏览器时真实打开页面并验证主要任务。
+分别审计视觉质量、使用体验、设计个性。所有发现标注 Evidence ID、
+能力等级、最强反证、change/retain/investigate 与最小修复方案。
+请明确指出哪些现有设计值得保留；本轮只诊断，不修改代码。
 ```
 
 ## 工作机制
@@ -46,6 +77,7 @@ bash scripts/install.sh claude /path/to/project
 python3 scripts/audit_ui.py examples/anti-pattern.html --format markdown
 python3 scripts/audit_ui.py examples/revised.html --format json
 python3 scripts/validate_skill.py
+python3 scripts/validate_report.py examples/audit-cases/*.json
 python3 -m unittest discover -s tests -v
 ```
 
@@ -58,7 +90,7 @@ python3 scripts/visual_smoke.py
 
 可检查 [修订前桌面截图](examples/screenshots/anti-pattern-desktop.png)、[修订后桌面截图](examples/screenshots/revised-desktop.png) 和 [修订后手机截图](examples/screenshots/revised-mobile.png)。
 
-**扫描器只做静态风险提示**。它不会计算渲染后嵌套圆角、实际色彩对比、React 状态或交互质量，更不是自动 WCAG 合规认证。它的误报需要人工复查。
+**扫描器和 JSON 合约校验都只做有限验证**。它不会计算渲染后嵌套圆角、实际色彩对比、React 状态或交互质量，更不是自动 WCAG 合规认证。它的误报需要人工复查。
 
 ## 目录
 
@@ -70,23 +102,32 @@ skills/ui-craft-guard/SKILL.md        # 代理入口
   references/chinese-ui.md            # 中文排版专项
   references/interaction-accessibility.md
   references/prompt-recipes.md        # 可复制提示
+  references/evidence-protocol.md     # 证据约束与三维独立判断
+  references/design-intent.md         # 品牌定位、反证与保留机制
+  references/tool-matrix.md           # 可选工具与能力边界
   templates/AUDIT_REPORT.md
   templates/DESIGN_DECISIONS.md
+  scripts/audit_ui.py                # 安装后仍可运行的扫描器
+  scripts/validate_report.py         # 安装后仍可运行的审计合约校验
 scripts/audit_ui.py                   # 纯标准库启发式扫描器
 scripts/visual_smoke.py               # 可选 Playwright 浏览器冒烟测试
 scripts/validate_skill.py             # 完整性检查
+scripts/validate_report.py            # JSON 证据合约校验（非审美评分）
 scripts/install.sh                    # 本地安装
 examples/anti-pattern.html            # 人为制造的反模式例子
 examples/revised.html                 # 改进后的原创示例
 examples/case-study.md                # 规则归因和验收说明
+examples/audit-cases/*.json           # 3 个对照的决策测试样例
 tests/test_audit.py
+tests/test_report_contract.py          # 证据门槛、反证与反例测试
+tests/test_packaging.py                # 三客户端目录安装与脚本同一性测试
 .github/workflows/ci.yml
 ```
 
 ## 重要边界
 
 1. `0.5px` 细线、`250ms` 动画、纯中性色不是普适硬规则。对比度、焦点、真实文案与品牌优先。
-2. “不像 AI”不等于“设计优秀”，**没有唯一视觉风格**。静态扫描 0 告警不代表通过用户测试。
+2. “不像 AI”不等于“设计优秀”，**没有唯一视觉风格**。静态扫描 0 告警不代表通过用户测试。三维独立评价，未运行不得声称实测；JSON 测试样例是构造数据，不是现场用户研究。
 3. 无第三方文章正文、截图或字体捆绑；规则均为原创概括，并保留出处。
 4. 本仓库仅是 Skill 和演示，不自动获取网站数据，不调用任何外部 API，也不自动修改用户项目。
 
